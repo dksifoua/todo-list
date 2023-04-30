@@ -1,4 +1,4 @@
-export class ToDoItem {
+export default class ToDoItem {
     private _id: number
     private _description: string
     private _checked: boolean
@@ -22,6 +22,4 @@ export class ToDoItem {
     }
 }
 
-type ToDoList = ToDoItem[]
-
-export default ToDoList
+export type ToDoList = ToDoItem[]

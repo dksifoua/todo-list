@@ -1,17 +1,17 @@
 import ToDoItem, { ToDoList } from "./model"
 
-interface IToDoService {
+export default interface IToDoService {
     save(): void
     load(): void
     clear(): void
     add(item: ToDoItem): void
-    remove(id: number): void
+    remove(id: string): void
 };
 
-class ToDoService implements IToDoService {
+export class ToDoService implements IToDoService {
     private _items: ToDoList
 
-    constructor() {
+    public constructor() {
         this._items = []
     }
 
@@ -23,7 +23,7 @@ class ToDoService implements IToDoService {
         const data: string | null = localStorage.getItem("todo-list")
         if(typeof data !== "string") return
 
-        const parsedData = JSON.parse(data) as { _id: number, _description: string, _checked: boolean }[]
+        const parsedData = JSON.parse(data) as { _id: string, _description: string, _checked: boolean }[]
         parsedData.forEach(item => this.add(new ToDoItem(item._id, item._description, item._checked)))
     }
 
@@ -37,8 +37,12 @@ class ToDoService implements IToDoService {
         this.save()
     }
 
-    remove(id: number): void {
+    remove(id: string): void {
         this._items = this._items.filter(item => item.id !== id)
         this.save()
+    }
+
+    public get items(): ToDoList {
+        return this._items
     }
 }

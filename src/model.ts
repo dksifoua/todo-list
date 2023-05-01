@@ -1,9 +1,9 @@
 export default class ToDoItem {
-    private _id: number
+    private _id: string
     private _description: string
     private _checked: boolean
 
-    constructor(id: number, description: string, checked: boolean = false) {
+    public constructor(id: string, description: string, checked: boolean = false) {
         this._id = id
         this._description = description
         this._checked = checked
@@ -19,6 +19,10 @@ export default class ToDoItem {
 
     public get checked() {
         return this._checked
+    }
+
+    public set checked(value) {
+        this._checked = value
     }
 }
 

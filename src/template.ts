@@ -1,18 +1,32 @@
 import ToDoItem from "./model"
-import { ToDoService } from "./service"
+import ToDoService from "./service"
 
-interface IDomTemplate {
+export interface IDomTemplate {
     clear(): void
     render(): void
 }
 
-class DomTemplate implements IDomTemplate {
+export default class DomTemplate implements IDomTemplate {
     private _ulElement: HTMLUListElement
     private _service: ToDoService
 
-    public constructor() {
+    public constructor(service: ToDoService) {
         this._ulElement = document.getElementById("listItems") as HTMLUListElement
-        this._service = new ToDoService()
+        this._service = service
+
+        const formElement = document.getElementById("itemEntryForm") as HTMLFormElement
+        formElement.addEventListener("submit", (event: SubmitEvent): void => {
+            event.preventDefault()
+
+            const inputElement = document.getElementById("newItem") as HTMLInputElement
+            const inputElementText: string = inputElement.value.trim()
+            console.log(inputElementText)
+            if (!inputElementText.length) return
+
+            const item: ToDoItem = new ToDoItem((this._service.items.length + 1).toString(), inputElementText)
+
+            this._service.add(item)
+        })
     }
 
     clear(): void {
@@ -46,9 +60,11 @@ class DomTemplate implements IDomTemplate {
                 this.render()
             })
 
+            liElement.append(inputElement)
+            liElement.append(labelElement)
+            liElement.append(buttonElement)
+
             this._ulElement.append(liElement)
-            this._ulElement.append(inputElement)
-            this._ulElement.append(buttonElement)
         })
     }    
 }
